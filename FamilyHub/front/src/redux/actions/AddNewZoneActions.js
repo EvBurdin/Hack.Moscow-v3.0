@@ -1,7 +1,7 @@
 import { GET_ALL_CHECKPOINTS, ADD_CHECKPOINT } from '../actionNames/AddNewZoneActionNames';
 
 export const addNewCheckpoint = (data) => async (dispatch) => {
-  console.log(data);
+  // console.log(data);
 
   const {
  latitude, longitude, name, familyId, description, cookies 
@@ -25,7 +25,7 @@ export const addNewCheckpoint = (data) => async (dispatch) => {
       }),
     });
     const myJson = await response.json();
-    console.log(myJson);
+    // console.log(myJson);
     myJson.User = data.User;
     // console.log(myJson);
     dispatch({ type: ADD_CHECKPOINT, payload: myJson });
@@ -47,7 +47,7 @@ export const getAllCheckpoints = (cookies) => async (dispatch) => {
       },
     });
     const myJson = await response.json();
-    console.log(myJson);
+    // console.log(myJson);
     dispatch({ type: GET_ALL_CHECKPOINTS, payload: myJson });
   } catch (e) {
     console.log(e);
@@ -55,7 +55,7 @@ export const getAllCheckpoints = (cookies) => async (dispatch) => {
 };
 
 export const dellCheckpoints = (cookies, id, arr) => async (dispatch) => {
-  console.log(id);
+  // console.log(id);
   for (let i = 0; i < arr.length; i++) {
     if (arr[i].id === id) {
       arr.splice(i, 1);

@@ -8,7 +8,7 @@ import {
 
 export const getEvents = (cookies) => async (dispatch) => {
   console.log('===============================================start get\n');
-  
+
   try {
     const response = await fetch('http://134.209.82.36:3000/api/family/calendar', {
       method: 'GET',
@@ -21,7 +21,7 @@ export const getEvents = (cookies) => async (dispatch) => {
       },
     });
     const data = await response.json();
-    // console.log(data);
+    // console.log('ENENTSAFTERDELETE=====================', data);
     const calendars = data[0].Calendars;
     console.log('calendars--------------------\n', calendars);
     const selected = calendars.map((date) => date.dateStart.substr(0, 10));
@@ -52,6 +52,8 @@ export const getEvents = (cookies) => async (dispatch) => {
 
 export const addEvent = (cookies, event) => async (dispatch) => {
   try {
+    console.log('============ FETCH============', cookies, event);
+
     const response = await fetch('http://134.209.82.36:3000/api/user/calendar', {
       method: 'POST',
       body: JSON.stringify(event),
@@ -72,7 +74,7 @@ export const addEvent = (cookies, event) => async (dispatch) => {
 
 export const deleteEvent = (cookies, id) => async (dispatch) => {
   console.log('================================================start deleted\n');
-  
+
   try {
     const response = await fetch('http://134.209.82.36:3000/api/user/calendar', {
       method: 'DELETE',

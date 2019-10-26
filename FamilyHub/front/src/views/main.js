@@ -37,20 +37,15 @@ class Main extends React.Component {
     });
   };
   static pushNotifications(data) {
-    console.log('Notifications = ' + data);
-
     Notifications.presentLocalNotificationAsync({
       title: data.title,
       body: data.body,
-      Android: {
+      android: {
         channelId: 'EVENT',
-      },
-      ChannelAndroid: {
-        name: 'FamilyHub',
       },
     });
   }
-
+  static location = () => {};
   runGeoLocation = async () => {
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
     const statusN = await Permissions.askAsync(Permissions.NOTIFICATIONS);
@@ -126,6 +121,7 @@ function mapDispatchToProps(dispatch) {
     getFamily: cookie => dispatch(getFamily(cookie)),
   };
 }
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
