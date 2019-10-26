@@ -97,7 +97,7 @@ module.exports = {
           include: [
             { model: User.scope('clear') },
             { model: TodoElement, attributes: ['id', 'goal', 'active'] },
-            { model: Location, attributes: ['name'] },
+            { model: Location, attributes: ['name', 'latitude', 'longitude'] },
           ],
         },
       ],

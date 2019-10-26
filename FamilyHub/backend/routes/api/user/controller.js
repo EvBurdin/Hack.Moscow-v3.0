@@ -30,7 +30,7 @@ module.exports = {
       include: [
         { model: Family, attributes: ['id', 'familyName'] },
         { model: TodoElement, attributes: ['id', 'goal', 'active'] },
-        { model: Location, attributes: ['name'] },
+        { model: Location, attributes: ['name', 'latitude', 'longitude'] },
       ],
     });
     res.json(todos);
