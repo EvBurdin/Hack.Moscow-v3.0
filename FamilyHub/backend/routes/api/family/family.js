@@ -10,4 +10,6 @@ router.route('/users').get(auth, controller.getUsers);
 router.route('/coordinates').get(auth, controller.getCoordinates);
 router.route('/todo').get(auth, controller.getTodos);
 router.route('/calendar').get(auth, controller.getCalendar);
+router.route('/spend/month').get(auth, controller.getSpends);
+router.route('/spend/month/total').get(auth, controller.getTotalSpends);
 module.exports = router;

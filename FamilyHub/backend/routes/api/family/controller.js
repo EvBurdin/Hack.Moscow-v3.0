@@ -8,6 +8,8 @@ const {
   Sequelize,
   Todo,
   Calendar,
+  Spend,
+  SpendCategory,
   sequelize,
 } = require('../../../models/Index');
 
@@ -110,5 +112,88 @@ module.exports = {
       ],
     });
     res.json(calendar);
+  },
+  async getSpends(req, res) {
+    const { user } = req;
+    let { date } = req.query;
+    date = new Date(date);
+    console.log(date);
+    const monthStartDay = new Date(date.getFullYear(), date.getMonth(), 1);
+    const monthEndDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    console.log(monthStartDay);
+
+    const spends = await user.getFamilys({
+      joinTableAttributes: [],
+      attributes: ['id', 'familyName'],
+      include: [
+        {
+          model: Spend,
+          // where: { date: { $gte: monthStartDay } },
+          where: { date: { [Op.between]: [monthStartDay, monthEndDay] } },
+          attributes: { exclude: ['FamilyId', 'createdAt', 'updatedAt', 'categoryId', 'UserId'] },
+          include: [
+            {
+              model: User.scope('minimum'),
+            },
+            {
+              model: SpendCategory,
+              as: 'category',
+              attributes: ['name'],
+            },
+          ],
+        },
+      ],
+    });
+    res.json(spends);
+  },
+  async getTotalSpends(req, res) {
+    const { user } = req;
+    let { date } = req.query;
+    date = new Date(date);
+    console.log(date);
+    const monthStartDay = new Date(date.getFullYear(), date.getMonth(), 1);
+    const monthEndDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    console.log(monthStartDay);
+
+    // const spends = await user.getFamilys({
+    //   joinTableAttributes: [],
+    //   attributes: ['id', 'familyName'],
+    //   group: ['Family.id'],
+    //   include: [
+    //     {
+    //       model: Spend,
+    //       // where: { date: { $gte: monthStartDay } },
+    //       where: { date: { [Op.between]: [monthStartDay, monthEndDay] } },
+    //       attributes: [[sequelize.fn('sum', sequelize.col('price')), 'total']],
+    //       include: [
+    //         {
+    //           model: SpendCategory,
+    //           as: 'category',
+    //           attributes: ['name'],
+    //         },
+    //       ],
+    //     },
+    //   ],
+    // });
+    const familys = await user.getFamilys({
+      attributes: ['id'],
+    });
+    console.log(familys[0].id);
+    const familyId = familys[0].id;
+
+    const spends = await Spend.findAll({
+      attributes: ['categoryId', [sequelize.fn('sum', sequelize.col('price')), 'total']],
+      group: ['categoryId', 'category.id', 'category.name'],
+      where: { date: { [Op.between]: [monthStartDay, monthEndDay] }, FamilyId: familyId },
+      include: [
+        {
+          model: SpendCategory,
+          as: 'category',
+          attributes: { exclude: ['createdAt', 'updatedAt', 'id'] },
+          group: ['categoryId'],
+        },
+      ],
+    });
+    res.json(spends);
   },
 };

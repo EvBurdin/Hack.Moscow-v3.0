@@ -41,6 +41,9 @@ module.exports = (sequelize, DataTypes) => {
         clear: {
           attributes: { exclude: ['createdAt', 'updatedAt', 'hash', 'salt'] },
         },
+        minimum: {
+          attributes: ['firstName', 'lastName', 'id'],
+        },
       },
     },
   );

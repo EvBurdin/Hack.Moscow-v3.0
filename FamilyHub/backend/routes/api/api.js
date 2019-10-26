@@ -7,8 +7,10 @@ const familyRouter = require('./family/family');
 const regLoginRouter = require('./regLogin/regLogin');
 const eventsRouter = require('./Events/events');
 const coordinatesRouter = require('./coordinates/coordinates');
+const spendRouter = require('./spends/spends');
 
 router.use('/user', userRouter);
+router.use('/spend', spendRouter);
 router.use('/family', familyRouter);
 router.use('/coordinates', coordinatesRouter);
 router.use('/events', eventsRouter);
