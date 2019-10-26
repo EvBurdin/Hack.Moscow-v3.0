@@ -30,13 +30,21 @@ class MapAddCoordinate extends React.Component {
               });
             }}
             initialRegion={{
-              latitude: 55.708906,
-              longitude: 37.5926676,
-              latitudeDelta: 0.01,
-              longitudeDelta: 0.01,
+              latitude: +this.props.markerTarget.Location.latitude,
+              longitude: +this.props.markerTarget.Location.longitude,
+              latitudeDelta: 0.005,
+              longitudeDelta: 0.005,
             }}
           >
-            {!!this.props.pickedCoordinate && (
+            {!!this.props.markerTarget.Location && !this.props.marker && (
+              <Marker
+                coordinate={{
+                  latitude: +this.props.markerTarget.Location.latitude,
+                  longitude: +this.props.markerTarget.Location.longitude,
+                }}
+              ></Marker>
+            )}
+            {!!this.props.pickedCoordinate && this.props.marker && (
               <Marker
                 coordinate={{
                   latitude: this.props.pickedCoordinate.latitude,

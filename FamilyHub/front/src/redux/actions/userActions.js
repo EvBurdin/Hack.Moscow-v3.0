@@ -31,7 +31,7 @@ export const getFamily = (cookies) => async (dispatch) => {
   const resp = await response.json();
   const data = resp[0].Users;
 
-  console.log('my family ------------', resp);
+  // console.log('my family ------------', resp);
   // const data = [];
   // for (let i = 0; i < myJson[0].Users.length; i++) {
   //   data.push(myJson[0].Users[i].Coordinates);

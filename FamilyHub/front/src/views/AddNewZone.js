@@ -12,9 +12,11 @@ import {
 import { Button, CheckBox, Overlay, ListItem, Text } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { ToastAndroid } from 'react-native';
+import * as Permissions from 'expo-permissions';
 import { addNewCheckpoint, getAllCheckpoints, dellCheckpoints } from '../redux/actions/AddNewZoneActions';
 import { pickCoordinate } from '../redux/actions/mapActions';
 import ModalMap from '../components/map/MapAddCoordinate';
+import * as Location from 'expo-location';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 class AddNewZone extends Component {
@@ -26,11 +28,34 @@ class AddNewZone extends Component {
     name: '',
     description: '',
     checked: false,
+    selfLocation: '',
   };
 
   componentDidMount() {
     this.props.getAllCheckpoints(this.props.cookies);
+    this.getLocation();
   }
+  getLocation = async () => {
+    let geoOptions = {
+      enableHighAccuracy: true,
+      timeOut: 20000, //20 second
+      //  maximumAge: 1000 //1 second
+    };
+    navigator.geolocation.getCurrentPosition(this.geoSuccess, console.log('wwwwwwwwwwwwwwwww'), geoOptions);
+  };
+  geoSuccess = position => {
+    console.log(position);
+
+    this.setState({
+      selfLocation: {
+        Location: {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        },
+      },
+    });
+    console.log(this.state.selfLocation);
+  };
 
   open = () => {
     this.setState({
@@ -45,7 +70,7 @@ class AddNewZone extends Component {
     this.props.pickCoordinate('');
   };
   save = () => {
-    console.log(this.props.checkpoints);
+    // console.log(this.props.checkpoints);
 
     if (this.state.name.length === 0) {
       ToastAndroid.showWithGravityAndOffset('Enter Checkpoint Name !', ToastAndroid.LONG, ToastAndroid.TOP, 20, 200);
@@ -123,7 +148,7 @@ class AddNewZone extends Component {
           >
             <View>
               <View style={{ height: 410 }}>
-                <ModalMap></ModalMap>
+                <ModalMap marker={true} markerTarget={this.state.selfLocation}></ModalMap>
               </View>
               <View style={styles.modalContainer}>
                 <View style={styles.inputContainer}>
