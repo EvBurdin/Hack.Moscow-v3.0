@@ -53,7 +53,7 @@ module.exports = {
         {
           model: User.scope('clear'),
           as: 'Users',
-          attributes: ['username'],
+          attributes: ['username', 'photo', 'firstName', 'lastName', 'fullName'],
           through: {
             attributes: [],
           },
