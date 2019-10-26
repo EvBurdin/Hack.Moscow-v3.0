@@ -1,0 +1,43 @@
+{
+  "expo": {
+    "name": "FamilyHub",
+    "slug": "family-hub",
+    "scheme": "family-hub",
+    "privacy": "public",
+    "sdkVersion": "35.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./src/img/icon2.png",
+    "splash": {
+      "image": "",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.familyhub.familyhub",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAkXFcmRNNIWVF41oAqeePDQnPHaA-CXDA"
+        }
+      },
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ]
+    }
+  }
+}
