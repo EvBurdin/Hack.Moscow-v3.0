@@ -42,11 +42,8 @@ class Main extends React.Component {
     Notifications.presentLocalNotificationAsync({
       title: data.title,
       body: data.body,
-      Android: {
+      android: {
         channelId: 'EVENT',
-      },
-      ChannelAndroid: {
-        name: 'FamilyHub',
       },
     });
   }
@@ -146,7 +143,7 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
       speed: data.locations[0].coords.speed,
       timestamp: data.locations[0].timestamp,
     };
-    console.log(locationPostData);
+    // console.log(locationPostData);
     try {
       response = await fetch('http://134.209.82.36.nip.io:3000/api/coordinates', {
         method: 'POST',
