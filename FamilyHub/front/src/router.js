@@ -2,7 +2,7 @@ import { createSwitchNavigator } from 'react-navigation';
 import React from 'react';
 import { createDrawerNavigator, DrawerNavigatorItems } from 'react-navigation-drawer';
 import {
- View, StyleSheet, ScrollView, Text, SafeAreaView, Dimensions 
+ View, StyleSheet, ScrollView, Text, Button, SafeAreaView, Dimensions, AsyncStorage 
 } from 'react-native';
 import Main from './views/main';
 import Calendar from './views/Calendar';
@@ -20,7 +20,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
+let cookies;
+AsyncStorage.getItem('@save_cookie').then((res) => {
+  cookies = res;
+});
 const CustomDrawerComponent = (props) => (
   <ScrollView style={{ marginTop: 30 }}>
     <View style={styles.titleContainer}>
@@ -50,6 +53,19 @@ const CustomDrawerComponent = (props) => (
       </View>
     </View>
     <DrawerNavigatorItems {...props} />
+    <Button
+      title="SOS"
+      onPress={() => fetch('http://134.209.82.36:3000/api/events/sos', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Cache: 'no-cache',
+            credentials: 'same-origin',
+            Cookie: `connect.sid=${cookies}`,
+          },
+        })}
+    />
   </ScrollView>
 );
 
