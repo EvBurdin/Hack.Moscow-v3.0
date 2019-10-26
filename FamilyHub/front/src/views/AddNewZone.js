@@ -118,8 +118,8 @@ class AddNewZone extends Component {
             isVisible={this.state.isVisible}
             // windowBackgroundColor="rgba(255, 255, 255, .5)"
             // overlayBackgroundColor="red"
-            // width="auto"
-            // height="auto"
+            width="100%"
+            height="100%"
           >
             <View>
               <View style={{ height: 410 }}>

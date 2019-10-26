@@ -146,7 +146,7 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
       speed: data.locations[0].coords.speed,
       timestamp: data.locations[0].timestamp,
     };
-    console.log(locationPostData);
+    // console.log(locationPostData);
     try {
       response = await fetch('http://134.209.82.36.nip.io:3000/api/coordinates', {
         method: 'POST',
@@ -176,7 +176,7 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
       const myJson = await response.json();
       if (myJson) {
         for (let i = 0; i < myJson.length; i++) {
-          console.log('for ' + i);
+          // console.log('for ' + i);
 
           body =
             myJson[i].timestamp
