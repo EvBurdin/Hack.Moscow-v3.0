@@ -5,5 +5,6 @@ const router = express.Router();
 const controller = require('./controller');
 
 router.route('/').get(auth, controller.getEvents);
+router.route('/sos').post(auth, controller.addSosEvent);
 
 module.exports = router;
