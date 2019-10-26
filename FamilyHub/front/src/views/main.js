@@ -143,10 +143,6 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
       timestamp: data.locations[0].timestamp,
     };
     // console.log(locationPostData);
-    Main.location({
-      latitude: data.locations[0].coords.latitude,
-      longitude: data.locations[0].coords.longitude,
-    });
     try {
       response = await fetch('http://134.209.82.36.nip.io:3000/api/coordinates', {
         method: 'POST',
