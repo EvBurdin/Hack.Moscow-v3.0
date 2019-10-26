@@ -44,6 +44,7 @@ class ToDoCreateModal extends Component {
   changeText = (text, index) => {
     newMiniTask = this.state.miniTask;
     newMiniTask[index].text = text;
+    newMiniTask[index].goal = text;
     this.setState({
       miniTask: newMiniTask,
     });

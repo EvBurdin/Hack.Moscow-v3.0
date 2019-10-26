@@ -48,10 +48,10 @@ export const addNewTask = (item) => async (dispatch) => {
     User: { photo: item.photo },
     Location: {
       name: item.location.name,
-      // latitude:
-      // longitude:
+      latitude: item.location.latitude,
+      longitude: item.location.longitude,
     },
-    todoElements: item.tasks,
+    TodoElements: item.tasks,
   });
   dispatch({ type: ADD_NEW_TASK, payload: item.arr });
 };

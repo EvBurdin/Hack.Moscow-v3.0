@@ -21,16 +21,6 @@ class ItemToDoList extends Component {
     });
   };
   render() {
-    let icon;
-    let color;
-    if (this.props.el.active) {
-      icon = 'exclamation';
-      color = '#F70909';
-    } else {
-      icon = 'check';
-      color = '#01DE3C';
-    }
-
     return (
       <View
         key={'q' + this.props.index + this.props.el.goal + this.props.el.updatedAt}
@@ -57,12 +47,6 @@ class ItemToDoList extends Component {
           }
           subtitle={this.props.el.Location.name}
           bottomDivider
-          checkmark={{
-            name: `${icon}`,
-            type: 'evilicon',
-            color: `${color}`,
-            size: 40,
-          }}
           chevron={{
             name: 'trash',
             type: 'evilicon',
