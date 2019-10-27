@@ -3,9 +3,7 @@ import { createAppContainer } from 'react-navigation';
 import { Provider } from 'react-redux';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-
 import Router from './src/router';
-
 import User from './src/redux/reducers/userReducer';
 import Map from './src/redux/reducers/mapReducer';
 import AddNewZone from './src/redux/reducers/AddNewZoneReducer';
