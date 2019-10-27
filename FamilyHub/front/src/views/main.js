@@ -172,7 +172,7 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
       const myJson = await response.json();
       if (myJson) {
         for (let i = 0; i < myJson.length; i++) {
-          console.log('for ' + i);
+          // console.log('for ' + i);
 
           body =
             myJson[i].timestamp

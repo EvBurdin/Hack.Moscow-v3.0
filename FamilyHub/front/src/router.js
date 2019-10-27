@@ -12,6 +12,7 @@ import Logout from './views/logout';
 import AddNewZone from './views/AddNewZone';
 import FamilyCreateJoin from './views/familyCreateJoin';
 import ToDo from './views/ToDoList';
+import Money from './views/Money';
 
 const styles = StyleSheet.create({
   titleContainer: {
@@ -60,6 +61,7 @@ const drawerNavigator = createDrawerNavigator(
     AddNewZone,
     ToDo,
     Calendar,
+    Money,
     Logout,
   },
   {

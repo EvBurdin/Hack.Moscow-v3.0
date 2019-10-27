@@ -290,22 +290,6 @@ const styles = StyleSheet.create({
   button: {
     marginBottom: 15,
   },
-  // delButtonContainer: {
-  //   zIndex: 5,
-  //   height: 45,
-  //   flexDirection: 'column',
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   marginBottom: 15,
-  //   marginLeft: 10,
-  //   width: 45,
-  //   borderRadius: 5,
-  //   borderColor: '#F96F6F',
-  //   borderWidth: 3,
-  // },
-  // loginButton: {
-  //   backgroundColor: '#00b5ec',
-  // },
   addButton: {
     zIndex: 4,
     flexDirection: 'row',
@@ -321,20 +305,4 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     paddingBottom: 5,
   },
-  // inputContainer: {
-  //   borderBottomColor: '#F5FCFF',
-  //   backgroundColor: '#FFFFFF',
-  //   borderRadius: 5,
-  //   borderBottomWidth: 1,
-  //   width: 250,
-  //   height: 45,
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  // },
-  // inputs: {
-  //   height: 45,
-  //   marginLeft: 16,
-  //   borderBottomColor: '#FFFFFF',
-  //   flex: 1,
-  // },
 });

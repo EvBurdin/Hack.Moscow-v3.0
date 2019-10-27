@@ -11,6 +11,7 @@ import Map from './src/redux/reducers/mapReducer';
 import AddNewZone from './src/redux/reducers/AddNewZoneReducer';
 import Calendar from './src/redux/reducers/calendarReducer';
 import ToDo from './src/redux/reducers/todoReducer';
+import Money from './src/redux/reducers/moneyReducer';
 import System from './src/redux/reducers/systemReducer';
 
 const rootReducer = combineReducers({
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   AddNewZone,
   Calendar,
   ToDo,
+  Money,
   System,
 });
 const composeEnchanters = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
