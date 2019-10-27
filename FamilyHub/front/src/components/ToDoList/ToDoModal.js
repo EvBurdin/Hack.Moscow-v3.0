@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, TextInput, TouchableOpacity, Text, Button } from 'react-native';
-
+import { View, StyleSheet, TextInput, ScrollView, Text, Button } from 'react-native';
+import { ListItem } from 'react-native-elements';
 import Constants from 'expo-constants';
 import RNPickerSelect from 'react-native-picker-select';
 import { connect } from 'react-redux';
@@ -75,13 +75,18 @@ class ToDoModal extends Component {
         <View style={styles.todosContainer}>
           <View style={styles.textWrapper}>
             <Text style={styles.title}>{this.props.data.goal}</Text>
-            {this.props.data.TodoElements.map((el, index) => {
-              return (
-                <Text style={styles.text} key={'littletask' + index}>
-                  {el.goal}
-                </Text>
-              );
-            })}
+            <ScrollView>
+              {this.props.data.TodoElements.map((el, index) => {
+                return (
+                  <ListItem
+                    style={styles.text}
+                    key={'littletask' + index}
+                    title={index + 1 + '.  ' + el.goal}
+                    bottomDivider
+                  ></ListItem>
+                );
+              })}
+            </ScrollView>
           </View>
           <View style={styles.buttonContainer}>
             <Button title="Отмена" onPress={() => this.props.modalClose()} />
