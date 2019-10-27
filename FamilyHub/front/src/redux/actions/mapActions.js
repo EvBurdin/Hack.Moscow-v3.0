@@ -16,7 +16,10 @@ export const getFamilyLocations = (cookies) => async (dispatch) => {
   const data = [];
   for (let i = 0; i < myJson[0].Users.length; i++) {
     data.push(myJson[0].Users[i].Coordinates);
-    data[i].user = myJson[0].Users[i].username;
+    data[i].user = {
+      name: myJson[0].Users[i].fullName,
+      photo: myJson[0].Users[i].photo,
+    };
   }
   dispatch({ type: GET_FAMILY_LOCATION, payload: data });
 };

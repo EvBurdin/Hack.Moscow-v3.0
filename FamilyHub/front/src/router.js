@@ -2,7 +2,7 @@ import { createSwitchNavigator } from 'react-navigation';
 import React from 'react';
 import { createDrawerNavigator, DrawerNavigatorItems } from 'react-navigation-drawer';
 import {
- View, StyleSheet, ScrollView, Text, Button, SafeAreaView, Dimensions, AsyncStorage 
+ View, StyleSheet, ScrollView, Text, Button, TouchableOpacity, Dimensions, AsyncStorage 
 } from 'react-native';
 import Main from './views/main';
 import Calendar from './views/Calendar';
@@ -53,8 +53,44 @@ const CustomDrawerComponent = (props) => (
       </View>
     </View>
     <DrawerNavigatorItems {...props} />
-    <Button
+    <View>
+      <TouchableOpacity
+        style={{
+          height: 120,
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginLeft: 75,
+          marginTop: 130,
+          marginBottom: 20,
+          width: 120,
+          borderRadius: 60,
+          backgroundColor: '#D71010',
+        }}
+        onPress={() => fetch('http://134.209.82.36:3000/api/events/sos', {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              Cache: 'no-cache',
+              credentials: 'same-origin',
+              Cookie: `connect.sid=${cookies}`,
+            },
+          })}
+      >
+        <Text
+          style={{
+            color: 'white',
+            fontSize: 35,
+          }}
+        >
+          SOS
+        </Text>
+      </TouchableOpacity>
+    </View>
+    {/* <Button
       title="SOS"
+      style={{}}
       onPress={() => fetch('http://134.209.82.36:3000/api/events/sos', {
           method: 'POST',
           headers: {
@@ -65,7 +101,7 @@ const CustomDrawerComponent = (props) => (
             Cookie: `connect.sid=${cookies}`,
           },
         })}
-    />
+    /> */}
   </ScrollView>
 );
 

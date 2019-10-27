@@ -1,4 +1,5 @@
 import React from 'react';
+import { Image } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { connect } from 'react-redux';
 import { getFamilyLocations } from '../../redux/actions/mapActions';
@@ -13,6 +14,7 @@ class MapRender extends React.Component {
   };
   componentDidMount() {
     this.locationsFetch();
+    console.log(this.props.Families);
   }
 
   async locationsFetch() {
@@ -43,9 +45,14 @@ class MapRender extends React.Component {
                   latitude: +el.latitude,
                   longitude: +el.longitude,
                 }}
-                title={el.user}
+                title={el.user.name}
                 description="DevTeam"
-              />
+              >
+                <Image
+                  style={{ width: 50, height: 50, borderRadius: 50, borderWidth: 3, borderColor: '#00b5ec' }}
+                  source={{ uri: el.user.photo }}
+                ></Image>
+              </Marker>
             );
           })}
       </MapView>
@@ -56,6 +63,7 @@ class MapRender extends React.Component {
 function mapStateToProps(store) {
   return {
     allLocations: store.Map.familyGPSLocation,
+    Families: store.User.family,
     cookies: store.User.cookies,
   };
 }
