@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   TouchableHighlight,
   ScrollView,
+  Modal,
 } from 'react-native';
 import { Button, CheckBox, Overlay, ListItem, Text } from 'react-native-elements';
 import TextField from '@material-ui/core/TextField';
@@ -89,16 +90,19 @@ class ToDoList extends Component {
                 return <ToDoItem el={el} index={index} key={'ToDoItem' + index} />;
               })}
           </ScrollView>
-          <Overlay
+          <Modal
             style={{ zIndex: 5 }}
-            isVisible={this.props.modalShow1}
+            animationType="slide"
+            transparent={false}
+            visible={this.props.modalShow1}
+            // isVisible={this.props.modalShow1}
             // windowBackgroundColor="rgba(255, 255, 255, .5)"
             // overlayBackgroundColor="red"
             // width="auto"
             // height="auto"
           >
             <ToDoCreateModal />
-          </Overlay>
+          </Modal>
         </View>
         <View style={{ alignSelf: 'flex-end', height: 20, width: '100%', paddingBottom: 100 }}>
           <TouchableOpacity style={styles.addButton} onPress={() => this.props.ModalShow1()}>
@@ -106,13 +110,13 @@ class ToDoList extends Component {
               style={
                 (styles.loginText,
                 {
-                  fontSize: 50,
+                  fontSize: 30,
                   fontWeight: '900',
                   color: 'white',
                 })
               }
             >
-              +
+              &#9998;
             </Text>
           </TouchableOpacity>
         </View>

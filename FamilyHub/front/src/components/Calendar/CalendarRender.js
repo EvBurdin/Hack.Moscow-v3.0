@@ -234,7 +234,7 @@ class CalendarRender extends React.Component {
                 textDayFontWeight: '200',
                 textMonthFontWeight: 'bold',
                 textDayHeaderFontWeight: '300',
-                textDayFontSize: 10,
+                textDayFontSize: 16,
                 textMonthFontSize: 16,
                 textDayHeaderFontSize: 16,
               }}
