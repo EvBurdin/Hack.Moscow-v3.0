@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, Modal } from 'react-native';
 import { ListItem, Overlay } from 'react-native-elements';
 import { ModalShow2 } from '../../redux/actions/systemAction';
 import { connect } from 'react-redux';
@@ -55,9 +55,16 @@ class ItemToDoList extends Component {
             onPress: () => this.props.deleteTodos(this.props.cookies, this.props.el.id, this.props.familyToDoList),
           }}
         />
-        <Overlay style={{ zIndex: 5 }} isVisible={this.state.showModal}>
+        <Modal
+          // style={{ zIndex: 5 }}
+          // isVisible={this.state.showModal}
+          style={{ zIndex: 5 }}
+          animationType="slide"
+          transparent={false}
+          visible={this.state.showModal}
+        >
           <ToDoModal data={this.props.el} modalClose={this.modalClose} />
-        </Overlay>
+        </Modal>
       </View>
     );
   }

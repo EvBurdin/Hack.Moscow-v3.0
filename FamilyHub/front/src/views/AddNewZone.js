@@ -1,15 +1,7 @@
 import React, { Component } from 'react';
 import Constants from 'expo-constants';
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  TextInput,
-  SafeAreaView,
-  TouchableHighlight,
-  ScrollView,
-} from 'react-native';
-import { Button, CheckBox, Overlay, ListItem, Text } from 'react-native-elements';
+import { StyleSheet, View, TouchableOpacity, TextInput, Button, Modal } from 'react-native';
+import { CheckBox, ListItem, Text } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { ToastAndroid } from 'react-native';
 import * as Permissions from 'expo-permissions';
@@ -138,54 +130,51 @@ class AddNewZone extends Component {
                 </View>
               );
             })}
-          <Overlay
-            style={{ zIndex: 5 }}
-            isVisible={this.state.isVisible}
-            // windowBackgroundColor="rgba(255, 255, 255, .5)"
-            // overlayBackgroundColor="red"
-            width="100%"
-            height="100%"
-          >
-            <View>
-              <View style={{ height: 410 }}>
+          <Modal visible={this.state.isVisible} animationType="slide" transparent={false}>
+            <View style={styles.modalWrapper}>
+              <View style={styles.map}>
                 <ModalMap marker={true} markerTarget={this.state.selfLocation}></ModalMap>
               </View>
-              <View style={styles.modalContainer}>
-                <View style={styles.inputContainer}>
-                  <TextInput
-                    style={styles.inputs}
-                    placeholder="Enter Checkpoint Name"
-                    keyboardAppearance="light"
-                    autoFocus={false}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    returnKeyType="next"
-                    underlineColorAndroid="transparent"
-                    onChangeText={name => this.setState({ name })}
-                  />
+              <View style={styles.inputsButtonsWrapper}>
+                <View style={styles.inputsContainer}>
+                  <View style={styles.inputContainer}>
+                    <TextInput
+                      style={(styles.inputs, styles.title)}
+                      placeholder="Введите имя точки"
+                      keyboardAppearance="light"
+                      autoFocus={false}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      returnKeyType="next"
+                      underlineColorAndroid="transparent"
+                      onChangeText={name => this.setState({ name })}
+                    />
+                  </View>
+                  <View style={styles.inputContainer}>
+                    <TextInput
+                      style={(styles.inputs, styles.text)}
+                      placeholder="Введите описание точки"
+                      keyboardAppearance="light"
+                      autoFocus={false}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      returnKeyType="next"
+                      underlineColorAndroid="transparent"
+                      onChangeText={description => this.setState({ description })}
+                    />
+                  </View>
                 </View>
-                <View style={styles.inputContainer}>
-                  <TextInput
-                    style={styles.inputs}
-                    placeholder="Enter Checkpoint Description"
-                    keyboardAppearance="light"
-                    autoFocus={false}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    returnKeyType="next"
-                    underlineColorAndroid="transparent"
-                    onChangeText={description => this.setState({ description })}
-                  />
+                <View style={styles.buttonContainer}>
+                  <View style={styles.button}>
+                    <Button title="Сохранить" onPress={() => this.save()} />
+                  </View>
+                  <View style={styles.button}>
+                    <Button title="Отмена" onPress={() => this.close()} />
+                  </View>
                 </View>
-                <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.save()}>
-                  <Text style={styles.loginText}>Save</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.close()}>
-                  <Text style={styles.loginText}>Cancel</Text>
-                </TouchableOpacity>
               </View>
             </View>
-          </Overlay>
+          </Modal>
         </View>
         <View style={{ alignSelf: 'flex-end', height: 20, width: '100%', paddingBottom: 100 }}>
           <TouchableOpacity style={styles.addButton} onPress={() => this.open()}>
@@ -193,13 +182,13 @@ class AddNewZone extends Component {
               style={
                 (styles.loginText,
                 {
-                  fontSize: 50,
+                  fontSize: 30,
                   fontWeight: '900',
                   color: 'white',
                 })
               }
             >
-              +
+              &#9998;
             </Text>
           </TouchableOpacity>
         </View>
@@ -237,6 +226,29 @@ export default connect(
 )(AddNewZone);
 
 const styles = StyleSheet.create({
+  modalWrapper: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+  },
+  map: {
+    flex: 4,
+  },
+  inputsButtonsWrapper: {
+    flex: 3,
+    marginTop: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+  },
+  inputsContainer: {
+    flex: 3,
+    marginTop: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
+    flexDirection: 'column',
+  },
   container: {
     flex: 1,
     marginTop: Constants.statusBarHeight + 15,
@@ -262,31 +274,21 @@ const styles = StyleSheet.create({
     fontWeight: '900',
   },
   buttonContainer: {
-    zIndex: 5,
-    height: 45,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
+    marginTop: 50,
     marginBottom: 15,
-    marginLeft: 10,
-    width: 250,
-    borderRadius: 5,
-  },
-  delButtonContainer: {
-    zIndex: 5,
-    height: 45,
-    flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 15,
-    marginLeft: 10,
-    width: 45,
-    borderRadius: 5,
-    borderColor: '#F96F6F',
-    borderWidth: 3,
+    marginHorizontal: 'auto',
+    flex: 2,
   },
-  loginButton: {
-    backgroundColor: '#00b5ec',
+  title: {
+    fontSize: 28,
+    fontWeight: '500',
+  },
+  text: {
+    fontSize: 20,
+  },
+  button: {
+    marginBottom: 15,
   },
   addButton: {
     zIndex: 4,
@@ -302,22 +304,5 @@ const styles = StyleSheet.create({
     width: 50,
     borderRadius: 50,
     paddingBottom: 5,
-  },
-  inputContainer: {
-    borderBottomColor: '#F5FCFF',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 5,
-    borderBottomWidth: 1,
-    width: 250,
-    height: 45,
-    marginBottom: 15,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  inputs: {
-    height: 45,
-    marginLeft: 16,
-    borderBottomColor: '#FFFFFF',
-    flex: 1,
   },
 });

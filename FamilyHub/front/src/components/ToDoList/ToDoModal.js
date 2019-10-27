@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, TextInput, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, TextInput, TouchableOpacity, Text, Button } from 'react-native';
 
 import Constants from 'expo-constants';
 import RNPickerSelect from 'react-native-picker-select';
@@ -68,22 +68,23 @@ class ToDoModal extends Component {
 
   render() {
     return (
-      <View>
-        <View>
-          <View style={{ height: 300 }}>
-            <ModalMap marker={false} markerTarget={this.props.data}></ModalMap>
-          </View>
-          <View style={styles.modalContainer}>
-            <Text>{this.props.data.goal}</Text>
+      <View style={styles.modalWrapper}>
+        <View style={styles.map}>
+          <ModalMap marker={false} markerTarget={this.props.data}></ModalMap>
+        </View>
+        <View style={styles.todosContainer}>
+          <View style={styles.textWrapper}>
+            <Text style={styles.title}>{this.props.data.goal}</Text>
             {this.props.data.TodoElements.map((el, index) => {
-              return <Text key={'littletask' + index}>{el.goal}</Text>;
+              return (
+                <Text style={styles.text} key={'littletask' + index}>
+                  {el.goal}
+                </Text>
+              );
             })}
-            <TouchableOpacity
-              style={[styles.buttonContainer, styles.loginButton]}
-              onPress={() => this.props.modalClose()}
-            >
-              <Text style={styles.loginText}>Cancel</Text>
-            </TouchableOpacity>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button title="Отмена" onPress={() => this.props.modalClose()} />
           </View>
         </View>
       </View>
@@ -114,14 +115,33 @@ export default connect(
 )(ToDoModal);
 
 const styles = StyleSheet.create({
+  modalWrapper: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+  },
+  map: {
+    flex: 4,
+  },
   container: {
     flex: 1,
     marginTop: Constants.statusBarHeight + 15,
   },
-  modalContainer: {
-    flex: 1,
-    marginTop: 10,
+  todosContainer: {
+    flex: 3,
+    marginTop: 20,
     paddingLeft: 20,
+    paddingRight: 20,
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: '500',
+    textAlign: 'center',
+  },
+  text: {
+    fontSize: 20,
   },
   loginTextH: {
     color: 'white',
@@ -133,68 +153,14 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '300',
   },
-  delText: {
-    color: '#F96F6F',
-    fontSize: 25,
-    fontWeight: '900',
+  textWrapper: {
+    flex: 3,
   },
   buttonContainer: {
-    zIndex: 5,
-    height: 45,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
+    marginTop: 50,
     marginBottom: 15,
-    marginLeft: 10,
-    width: 250,
-    borderRadius: 5,
-  },
-  delButtonContainer: {
-    zIndex: 5,
-    height: 45,
-    flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 15,
-    marginLeft: 10,
-    width: 45,
-    borderRadius: 5,
-    borderColor: '#F96F6F',
-    borderWidth: 3,
-  },
-  loginButton: {
-    backgroundColor: '#00b5ec',
-  },
-  addButton: {
-    zIndex: 4,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F96F6F',
-    position: 'absolute',
-    zIndex: 2,
-    marginTop: 0,
-    marginLeft: 330,
-    height: 50,
-    width: 50,
-    borderRadius: 50,
-    paddingBottom: 5,
-  },
-  inputContainer: {
-    borderBottomColor: '#F5FCFF',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 5,
-    borderBottomWidth: 1,
-    width: 250,
-    height: 45,
-    marginBottom: 15,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  inputs: {
-    height: 45,
-    marginLeft: 16,
-    borderBottomColor: '#FFFFFF',
+    marginHorizontal: 'auto',
     flex: 1,
   },
 });
