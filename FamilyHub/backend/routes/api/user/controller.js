@@ -6,6 +6,8 @@ const {
   Family,
   Todo,
   Calendar,
+  TodoElement,
+  Location,
 } = require('../../../models/Index');
 
 module.exports = {
@@ -25,15 +27,38 @@ module.exports = {
     const { user } = req;
     const todos = await user.getTodos({
       attributes: { exclude: ['FamilyId'] },
-      include: [{ model: Family, attributes: ['id', 'familyName'] }],
+      include: [
+        { model: Family, attributes: ['id', 'familyName'] },
+        { model: TodoElement, attributes: ['id', 'goal', 'active'] },
+        { model: Location, attributes: ['name', 'latitude', 'longitude'] },
+      ],
     });
     res.json(todos);
   },
   async addTodo(req, res) {
     const { user } = req;
-    const { goal, familyId: FamilyId } = req.body;
-    const todo = await Todo.create({ goal, FamilyId, author: user.id });
-    res.json(todo);
+    const {
+      goal, //
+      familyId: FamilyId,
+      locationId: LocationId,
+      todoElements,
+    } = req.body;
+    console.log(todoElements);
+
+    const todo = await Todo.create({
+      goal, //
+      FamilyId,
+      author: user.id,
+      LocationId,
+    });
+    todoElements.forEach(async (el) => {
+      await TodoElement.create({
+        goal: el.text,
+        active: true,
+        TodoId: todo.id,
+      });
+    });
+    res.json('success');
   },
   async updateTodo(req, res) {
     const { id, goal, active } = req.body;

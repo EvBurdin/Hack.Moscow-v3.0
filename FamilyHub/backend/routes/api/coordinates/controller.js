@@ -6,6 +6,7 @@ const {
   Sequelize,
   sequelize,
   Family,
+  Todo,
   User,
   UsersFamily,
   Event,
@@ -50,7 +51,14 @@ module.exports = {
         type: sequelize.QueryTypes.SELECT,
       },
     );
-    const nowLocation = curLoccation.length !== 0 ? curLoccation[0].name : '';
+    let nowLocation;
+    let todoMessage;
+    if (curLoccation.length !== 0) {
+      nowLocation = curLoccation[0].name;
+      const todoCount = await Todo.findAll({ where: { LocationId: curLoccation[0].id } });
+      todoMessage =
+        todoCount.length !== 0 ? `В данной локации имеется несколько запланированных дел(${todoCount.length})` : '';
+    }
     if (!lastCoordinate) {
       Coordinate.create({
         accuracy,
@@ -80,11 +88,11 @@ module.exports = {
     let event = '';
     if (!lastCoordinate.location) {
       if (nowLocation) {
-        event = `Прибыл в ${nowLocation}`;
+        event = `Прибыл в ${nowLocation} ${todoMessage}`;
       }
     } else {
       if (nowLocation !== lastCoordinate.location) {
-        event = `Убыл из ${lastCoordinate.location} прибыл в ${nowLocation}`;
+        event = `Убыл из ${lastCoordinate.location} прибыл в ${nowLocation} ${todoMessage}`;
       }
       if (nowLocation === '') {
         event = `Убыл из ${lastCoordinate.location}`;

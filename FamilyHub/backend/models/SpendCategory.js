@@ -2,7 +2,7 @@ module.exports = (sequelize, DataTypes) => {
   const SpendCategory = sequelize.define(
     'SpendCategory',
     {
-      name: {
+      label: {
         type: DataTypes.STRING(2000),
       },
     },

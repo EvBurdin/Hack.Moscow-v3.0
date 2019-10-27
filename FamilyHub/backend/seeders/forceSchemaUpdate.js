@@ -16,6 +16,7 @@ async function forceSchemaUpdate(models) {
   await models.Family.sync({ alter: true });
   await models.UsersFamily.sync({ alter: true });
   await models.Todo.sync({ alter: true });
+  await models.TodoElement.sync({ alter: true });
   await models.Calendar.sync({ alter: true });
   await models.Location.sync({ alter: true });
   await models.Event.sync({ alter: true });

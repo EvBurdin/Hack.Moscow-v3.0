@@ -23,8 +23,10 @@ module.exports = (sequelize, DataTypes) => {
     },
   );
   Todo.associate = (models) => {
+    Todo.belongsTo(models.Location);
     Todo.belongsTo(models.Family);
     Todo.belongsTo(models.User, { foreignKey: 'author' });
+    Todo.hasMany(models.TodoElement, { onDelete: 'cascade' });
   };
   return Todo;
 };

@@ -33,9 +33,9 @@ module.exports = {
     res.json(spandCategorys);
   },
   async addSpendCategorys(req, res) {
-    const { name } = req.body;
+    const { label } = req.body;
     const newCategory=await SpendCategory.create({
-      name,
+      label,
     });
 
     res.json(newCategory);

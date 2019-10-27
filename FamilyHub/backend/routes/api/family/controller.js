@@ -10,6 +10,8 @@ const {
   Calendar,
   Spend,
   SpendCategory,
+  TodoElement,
+  Location,
   sequelize,
 } = require('../../../models/Index');
 
@@ -51,7 +53,7 @@ module.exports = {
         {
           model: User.scope('clear'),
           as: 'Users',
-          attributes: ['username'],
+          attributes: ['username', 'photo', 'firstName', 'lastName', 'fullName'],
           through: {
             attributes: [],
           },
@@ -92,7 +94,11 @@ module.exports = {
         {
           model: Todo,
           attributes: { exclude: ['FamilyId'] },
-          include: [{ model: User.scope('clear') }],
+          include: [
+            { model: User.scope('clear') },
+            { model: TodoElement, attributes: ['id', 'goal', 'active'] },
+            { model: Location, attributes: ['name', 'latitude', 'longitude'] },
+          ],
         },
       ],
     });
@@ -138,7 +144,7 @@ module.exports = {
             {
               model: SpendCategory,
               as: 'category',
-              attributes: ['name'],
+              attributes: ['label'],
             },
           ],
         },
@@ -183,7 +189,7 @@ module.exports = {
 
     const spends = await Spend.findAll({
       attributes: ['categoryId', [sequelize.fn('sum', sequelize.col('price')), 'total']],
-      group: ['categoryId', 'category.id', 'category.name'],
+      group: ['categoryId', 'category.id', 'category.label'],
       where: { date: { [Op.between]: [monthStartDay, monthEndDay] }, FamilyId: familyId },
       include: [
         {
