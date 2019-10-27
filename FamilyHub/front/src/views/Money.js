@@ -50,6 +50,7 @@ class Money extends Component {
     totalMonth: [],
   };
   componentDidMount() {
+    this.props.getAllCategories(this.props.cookies);
     this.setState({ dateOfView: new Date() }, () => {
       this.setState({ monthName: this.state.month[this.state.dateOfView.getMonth()] }, () => {
         this.setState({ currentMonth: new Date().toISOString().slice(0, 10) }, () => {
@@ -59,12 +60,6 @@ class Money extends Component {
         });
       });
     });
-
-    // this.setState({ monthName: this.state.month[this.state.dateOfView.getMonth()] })
-    // this.setState({ currentMonth: (new Date()).toISOString().slice(0, 10) }, () => { //2019-04-04
-    //   this.props.getTotalMonth(this.state.currentMonth, this.props.cookies);
-    //   this.props.spendMonth(this.state.currentMonth, this.props.cookies);
-    // })
   }
   increaseMonth = async () => {
     const date = this.state.dateOfView;
@@ -73,6 +68,8 @@ class Money extends Component {
     await this.setState({ monthName: this.state.month[this.state.dateOfView.getMonth()] });
     await this.setState({ currentMonth: this.state.dateOfView.toISOString().slice(0, 10) }, () => {
       //2019-04-04
+      console.log('МЕСЯЦ СЕЙЧАС ',this.state.currentMonth);
+      
       this.props.getTotalMonth(this.state.currentMonth, this.props.cookies);
       this.props.spendMonth(this.state.currentMonth, this.props.cookies);
     });
@@ -98,10 +95,10 @@ class Money extends Component {
     this.setState({
       dialogVisible: true,
     });
-    this.props.getAllCategories(this.props.cookies);
+    // this.props.getAllCategories(this.props.cookies);
     // console.log('TTTTTTTTTTTTTTTTTTTTTTTTTTTT',this.props.totalMonth);
 
-    // console.log('Все категории',this.props.allCategory);
+    console.log('Все категории',this.props.allCategory);
     this.setState({ totalMonth: this.props.totalMonth });
   };
   closeDialog = () => {
@@ -116,10 +113,12 @@ class Money extends Component {
   };
   handleOk = () => {
     const dateNow = new Date().toISOString().slice(0, 10);
+    console.log('iiiiiiiiiiiiiidddddddddddd',this.state.value);
+    
     const data = {
       categoryId: this.state.value,
       price: this.state.price,
-      date: dateNow,
+      date: this.state.currentMonth,
       FamilyId: 1,
       comment: this.state.comment,
     };
@@ -239,7 +238,8 @@ class Money extends Component {
           <Dialog.Container visible={this.state.dialogVisible}>
             <Dialog.Title>Добавьте расходы</Dialog.Title>
             <RNPickerSelect
-              onValueChange={value => this.setState({ value: value })}
+              onValueChange={value =>this.setState({value:value})
+            }
               items={this.props.allCategory}
               style={styles.graph}
             />
