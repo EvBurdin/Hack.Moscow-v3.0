@@ -37,20 +37,15 @@ class Main extends React.Component {
     });
   };
   static pushNotifications(data) {
-    console.log('Notifications = ' + data);
-
     Notifications.presentLocalNotificationAsync({
       title: data.title,
       body: data.body,
-      Android: {
+      android: {
         channelId: 'EVENT',
-      },
-      ChannelAndroid: {
-        name: 'FamilyHub',
       },
     });
   }
-
+  static location = () => {};
   runGeoLocation = async () => {
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
     const statusN = await Permissions.askAsync(Permissions.NOTIFICATIONS);
@@ -126,6 +121,7 @@ function mapDispatchToProps(dispatch) {
     getFamily: cookie => dispatch(getFamily(cookie)),
   };
 }
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
@@ -146,7 +142,7 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
       speed: data.locations[0].coords.speed,
       timestamp: data.locations[0].timestamp,
     };
-    console.log(locationPostData);
+    // console.log(locationPostData);
     try {
       response = await fetch('http://134.209.82.36.nip.io:3000/api/coordinates', {
         method: 'POST',
@@ -176,7 +172,7 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
       const myJson = await response.json();
       if (myJson) {
         for (let i = 0; i < myJson.length; i++) {
-          console.log('for ' + i);
+          // console.log('for ' + i);
 
           body =
             myJson[i].timestamp

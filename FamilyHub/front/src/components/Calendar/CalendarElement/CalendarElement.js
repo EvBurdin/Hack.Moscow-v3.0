@@ -23,9 +23,9 @@ class CalendarElement extends Component {
     } = this.props;
     return (
       <View>
-        <Text style={{ fontWeight: 'bold' }}>{title}</Text>
+        <Text style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 5 }}>{title}</Text>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-          <Text>{text}</Text>
+          <Text style={{ fontSize: 18 }}>{text}</Text>
           <Button
             icon={<Icon name="trash-o" size={20} color="black" />}
             // title="Button with icon component"
@@ -37,7 +37,7 @@ class CalendarElement extends Component {
             // title="Delete"
           />
         </View>
-        <Divider style={{ backgroundColor: 'blue', marginBottom: 10 }} />
+        <Divider style={{ backgroundColor: 'blue' }} />
       </View>
     );
   }

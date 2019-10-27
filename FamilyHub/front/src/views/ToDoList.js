@@ -1,116 +1,124 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableHighlight, ScrollView, Text } from 'react-native';
-import { Button, CheckBox, Overlay, Input } from 'react-native-elements';
-import { connect } from 'react-redux';
+import Constants from 'expo-constants';
 import {
-  showModal,
-  editInput,
-  saveTask,
-  checkTask,
-  delTask,
-  getFamilyToDo,
-  saveTaskNew,
-} from '../redux/actions/todoActions';
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  TextInput,
+  SafeAreaView,
+  TouchableHighlight,
+  ScrollView,
+  Modal,
+} from 'react-native';
+import { Button, CheckBox, Overlay, ListItem, Text } from 'react-native-elements';
+import TextField from '@material-ui/core/TextField';
+import { connect } from 'react-redux';
+import { ToastAndroid } from 'react-native';
+import { getFamilyTodos, deleteTodos } from '../redux/actions/todoActions';
+import { pickCoordinate } from '../redux/actions/mapActions';
+import ModalMap from '../components/map/MapAddCoordinate';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import ToDoItem from '../components/ToDoList/ItemToDoList';
+import ToDoCreateModal from '../components/ToDoList/ToDoCreateModal';
+import { ModalShow1 } from '../redux/actions/systemAction';
 
 class ToDoList extends Component {
-  state = {};
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
+  static navigationOptions = {
+    title: 'ToDoList',
+  };
+  state = {
+    isVisible: false,
+    name: '',
+    description: '',
+    checked: false,
+  };
 
   componentDidMount() {
-    this.familyToDoFetch();
-    this.interval = setInterval(this.familyToDoFetch, 15000);
+    this.props.getFamilyTodos(this.props.cookies);
   }
 
-  // componentDidUpdate(prevProps) {
-  //   if (prevProps.list.length < this.props.list.length) {
-  //     this.familyToDoFetch();
-  //   }
-  // }
+  open = () => {
+    this.setState({
+      isVisible: true,
+    });
+  };
+  close = () => {
+    this.setState({
+      isVisible: false,
+      name: '',
+    });
+    this.props.pickCoordinate('');
+  };
+  save = () => {
+    console.log(this.props.checkpoints);
 
-  familyToDoFetch = async () => {
-    console.log('update todo');
-    const somePromise = await this.props.getFamilyToDo(this.props.cookies);
+    if (this.state.name.length === 0) {
+      ToastAndroid.showWithGravityAndOffset('Enter Checkpoint Name !', ToastAndroid.LONG, ToastAndroid.TOP, 20, 200);
+    } else {
+      this.props.addNewCheckpoint({
+        cookies: this.props.cookies,
+        latitude: this.props.pickedCoordinate.latitude,
+        longitude: this.props.pickedCoordinate.longitude,
+        name: this.state.name,
+        description: this.state.description,
+        familyId: this.props.user.Families[0].id,
+        User: this.props.user,
+      });
+      this.close();
+    }
   };
 
   render() {
     return (
-      <View style={{ flex: 1, flexDirection: 'column', marginTop: 30 }}>
-        <View>
-          <View style={{ height: 150, backgroundColor: 'transparent', justifyContent: 'center' }}>
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={{ color: 'white', fontSize: 40, backgroundColor: 'black', borderRadius: 5 }}>Family</Text>
-            </View>
-            <View style={{ marginTop: -2, marginLeft: 70 }}>
-              <Text style={{ color: 'black', fontSize: 40, backgroundColor: '#FFFF33', borderRadius: 5 }}>ToDo</Text>
+      <View style={{ flex: 1 }}>
+        <View style={styles.container}>
+          <View onPress={() => this.props.getAllCheckpoints(this.props.cookies)}>
+            <View style={{ height: 150, backgroundColor: 'transparent', justifyContent: 'center' }}>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={{ color: 'white', fontSize: 40, backgroundColor: 'black', borderRadius: 5 }}>Family</Text>
+              </View>
+              <View style={{ marginTop: -2, marginLeft: 70 }}>
+                <Text style={{ color: 'black', fontSize: 40, backgroundColor: '#FFFF33', borderRadius: 5 }}>
+                  ToDoList
+                </Text>
+              </View>
             </View>
           </View>
-        </View>
-        <TouchableHighlight underlayColor="white">
           <ScrollView>
-            {this.props.list
-              .map((item, i) => (
-                <View key={i} style={{ flex: 1, justifyContent: 'flex-end' }}>
-                  <CheckBox
-                    key={item.id}
-                    title={item.goal}
-                    checked={!item.active}
-                    onIconPress={() => {
-                      this.props.checkTask(
-                        item.goal,
-                        item.active,
-                        i,
-                        item.id || this.props.returnedFromDBTaskID,
-                        this.props.cookies,
-                      );
-                    }}
-                    onLongPress={() =>
-                      this.props.delTask(i, item.id || this.props.returnedFromDBTaskID, this.props.cookies)
-                    }
-                    onPress={() => {
-                      this.props.showModal(true, i, item.id || this.props.returnedFromDBTaskID);
-                    }}
-                  />
-                </View>
-              ))
-              .sort((a, b) => a.key - b.key)}
-            <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-end' }}>
-              <Button onPress={() => this.props.showModal(true, -1)} title="Create new task" color="#841584" />
-            </View>
+            {!!this.props.familyToDoList &&
+              this.props.familyToDoList.map((el, index) => {
+                return <ToDoItem el={el} index={index} key={'ToDoItem' + index} />;
+              })}
           </ScrollView>
-        </TouchableHighlight>
-        <View>
-          <Overlay
-            height="30%"
-            isVisible={this.props.isVisibleNewTask}
-            onBackdropPress={() => this.props.showModal(false, -1)}
+          <Modal
+            style={{ zIndex: 5 }}
+            animationType="slide"
+            transparent={false}
+            visible={this.props.modalShow1}
+            // isVisible={this.props.modalShow1}
+            // windowBackgroundColor="rgba(255, 255, 255, .5)"
+            // overlayBackgroundColor="red"
+            // width="auto"
+            // height="auto"
           >
-            <View style={{ flex: 2, justifyContent: 'space-between' }}>
-              <Text style={{ fontWeight: 'bold', fontSize: 18 }}> New task:</Text>
-              <Input
-                style={{ marginBottom: 100 }}
-                autoFocus
-                onChangeText={text => this.props.editInput(text)}
-                value={this.props.newTaskTitle}
-              />
-              <View />
-              <Button
-                style={styles.button}
-                onPress={() =>
-                  this.props.saveTaskNew(
-                    this.props.list.length,
-                    this.props.newTaskTitle,
-                    this.props.currentCheck,
-                    this.props.currentTaskIDInDB,
-                    this.props.curFamilyID,
-                    this.props.cookies,
-                  )
-                }
-                title="Save task"
-              />
-            </View>
-          </Overlay>
+            <ToDoCreateModal />
+          </Modal>
+        </View>
+        <View style={{ alignSelf: 'flex-end', height: 20, width: '100%', paddingBottom: 100 }}>
+          <TouchableOpacity style={styles.addButton} onPress={() => this.props.ModalShow1()}>
+            <Text
+              style={
+                (styles.loginText,
+                {
+                  fontSize: 30,
+                  fontWeight: '900',
+                  color: 'white',
+                })
+              }
+            >
+              &#9998;
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -118,30 +126,21 @@ class ToDoList extends Component {
 }
 
 function mapStateToProps(state) {
-  // console.log(state);
   return {
-    list: state.ToDo.list,
-    newTaskTitle: state.ToDo.newTaskTitle,
-    isVisibleNewTask: state.ToDo.isVisibleNewTask,
-    editTaskID: state.ToDo.editTaskID,
+    modalShow1: state.System.modalShow1,
     cookies: state.User.cookies,
-    curFamilyID: state.ToDo.currentFamilyID,
-    currentCheck: state.ToDo.currentCheck,
-    currentTaskIDInDB: state.ToDo.currentTaskIDInDB,
-    returnedFromDBTaskID: state.ToDo.returnedFromDBTaskID,
+    familyToDoList: state.ToDo.familyToDo,
+    pickedCoordinate: state.Map.pickedCoordinate,
+    user: state.User.user,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    showModal: (bool, i, currID) => dispatch(showModal(bool, i, currID)),
-    editInput: text => dispatch(editInput(text)),
-    saveTask: () => dispatch(saveTask()),
-    checkTask: (title, checkedBool, i, id, cookie) => dispatch(checkTask(title, checkedBool, i, id, cookie)),
-    delTask: (i, taskID, cookie) => dispatch(delTask(i, taskID, cookie)),
-    getFamilyToDo: cookie => dispatch(getFamilyToDo(cookie)),
-    saveTaskNew: (todoLength, title, checkedBool, taskID, curFamID, cookie) =>
-      dispatch(saveTaskNew(todoLength, title, checkedBool, taskID, curFamID, cookie)),
+    ModalShow1: () => dispatch(ModalShow1()),
+    getFamilyTodos: cookies => dispatch(getFamilyTodos(cookies)),
+    deleteTodos: (cookies, id, arr) => dispatch(deleteTodos(cookies, id, arr)),
+    dellCheckpoints: (cookies, id, arr) => dispatch(dellCheckpoints(cookies, id, arr)),
   };
 }
 
@@ -151,31 +150,87 @@ export default connect(
 )(ToDoList);
 
 const styles = StyleSheet.create({
-  button: {
-    marginTop: 100,
-  },
   container: {
     flex: 1,
-    paddingTop: 15,
+    marginTop: Constants.statusBarHeight + 15,
   },
-  optionsTitleText: {
-    fontSize: 16,
-    marginLeft: 15,
-    marginTop: 9,
-    marginBottom: 12,
+  modalContainer: {
+    flex: 1,
+    marginTop: 10,
+    paddingLeft: 20,
   },
-  optionIconContainer: {
-    marginRight: 9,
-  },
-  option: {
-    backgroundColor: '#fdfdfd',
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#EDEDED',
-  },
-  optionText: {
+  loginTextH: {
+    color: 'white',
     fontSize: 15,
-    marginTop: 1,
+    fontWeight: '600',
+  },
+  loginText: {
+    color: 'white',
+    fontSize: 10,
+    fontWeight: '300',
+  },
+  delText: {
+    color: '#F96F6F',
+    fontSize: 25,
+    fontWeight: '900',
+  },
+  buttonContainer: {
+    zIndex: 5,
+    height: 45,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 15,
+    marginLeft: 10,
+    width: 250,
+    borderRadius: 5,
+  },
+  delButtonContainer: {
+    zIndex: 5,
+    height: 45,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 15,
+    marginLeft: 10,
+    width: 45,
+    borderRadius: 5,
+    borderColor: '#F96F6F',
+    borderWidth: 3,
+  },
+  loginButton: {
+    backgroundColor: '#00b5ec',
+  },
+  addButton: {
+    zIndex: 4,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F96F6F',
+    position: 'absolute',
+    zIndex: 2,
+    marginTop: 0,
+    marginLeft: 330,
+    height: 50,
+    width: 50,
+    borderRadius: 50,
+    paddingBottom: 5,
+  },
+  inputContainer: {
+    borderBottomColor: '#F5FCFF',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 5,
+    borderBottomWidth: 1,
+    width: 250,
+    height: 45,
+    marginBottom: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  inputs: {
+    height: 45,
+    marginLeft: 16,
+    borderBottomColor: '#FFFFFF',
+    flex: 1,
   },
 });
